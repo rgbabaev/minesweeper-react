@@ -1,0 +1,68 @@
+.Arena {
+  display: flex;
+  /* justify-content: center; */
+  max-width: 100%;
+  overflow: auto;
+}
+
+.Arena__inner {
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  border: solid 1px #ccc;
+  margin: 12px;
+  user-select: none;
+}
+
+.Arena__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  cursor: default;
+  font-size: 12px;
+}
+
+.Arena__cell_opened {
+  border: solid 1px #ccc;
+  font-weight: bold;
+  border-right-width: 0;
+  border-bottom-width: 0;
+}
+
+.Arena__cell_opened[data-neighbor-mines="1"] {
+  color: #1600fb;
+}
+
+.Arena__cell_opened[data-neighbor-mines="2"] {
+  color: #037e00;
+}
+
+.Arena__cell_opened[data-neighbor-mines="3"] {
+  color: #fe0001;
+}
+
+.Arena__cell_opened[data-neighbor-mines="4"] {
+  color: #060080;
+}
+
+.Arena__cell_opened[data-neighbor-mines="5"] {
+  color: #830000;
+}
+
+.Arena__cell_opened[data-neighbor-mines="6"] {
+  color: #008080;
+}
+
+.Arena__cell_opened[data-neighbor-mines="7"] {
+  color: #000000;
+}
+
+.Arena__cell_opened[data-neighbor-mines="8"] {
+  color: #808080;
+}
+
+.Arena__cell_closed {
+  border: outset 2px #fff;
+  background-color: #ccc;
+}
