@@ -28,7 +28,7 @@ export const ArenaCell = ({
     >
       {opened
         ? cell.mined
-          ? "💣"
+          ? '🦠'
           : cell.flagged && gameState === "lost" ? "❌" : cell.neighborMines
         : cell.flagged || gameState === "won"
           ? "🚩"
