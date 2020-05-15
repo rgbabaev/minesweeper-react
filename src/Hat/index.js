@@ -1,5 +1,10 @@
 import React from "react";
-import { Button, ControlsPanel, Text } from '@tarantool.io/ui-kit';
+import {
+  Button,
+  ControlsPanel,
+  Switcher,
+  Text
+} from '@tarantool.io/ui-kit';
 import b_ from 'b_';
 import './styles.css';
 
@@ -16,13 +21,14 @@ export const Hat = ({
   <ControlsPanel
     className={b()}
     controls={[
-      <Text>{minesLeftCount}</Text>,
-      <Button onClick={onResetClick} title="New game" intent='secondary'>
+      <Text className={b('output')} title='Mines counter'>💣{minesLeftCount}</Text>,
+      <Text className={b('output')} title='Timer'>⏱{timerValue === null ? 0 : Math.round(timerValue / 1000)}</Text>,
+      <Button onClick={onResetClick} title='New game' intent={gameState === 'playing' ? 'secondary' : 'primary'}>
         {gameState === "playing" ? "🙂" : gameState === "won" ? "😎" : "😵"}
+        New game
       </Button>,
-      <Text>{timerValue}</Text>,
-      <Button onClick={onFlagClick} title="options">🚩</Button>,
-      <Button onClick={onOptionsClick} title="options">️⚙</Button>
+      <Switcher onClick={onFlagClick} title="Flag">Flag</Switcher>,
+      <Button onClick={onOptionsClick} title="Options">Options</Button>
     ]}
   />
 );

@@ -1,0 +1,12 @@
+.Options__inner {
+  margin: 0 16px;
+}
+
+.Options__inputs {
+  display: flex;
+  margin: 0 -6px;
+}
+
+.Options__labeledInput {
+  margin: 0 6px;
+}

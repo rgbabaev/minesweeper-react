@@ -21,14 +21,14 @@ export default class App extends React.Component {
   newGame = (arena = [10, 10], mines = 25) => this.game.configure(arena, mines);
 
   render() {
-    const { gameState, minesCountTotal, arena, flagged } = this.game.getStats();
+    const { gameState, minesCountTotal, arena, flagged, timerValue } = this.game.getStats();
     const { showOptions } = this.state;
 
     return (
       <div className="App">
         <Hat
           gameState={gameState}
-          timerValue={10}
+          timerValue={timerValue}
           minesLeftCount={minesCountTotal - flagged}
           onResetClick={this.game.reset}
           onOptionsClick={this.toggleOptions}
@@ -39,6 +39,7 @@ export default class App extends React.Component {
           cells={this.game.getCells()}
           onCellOpen={this.game.handleCellClick}
           onCellFlag={this.game.flagCell}
+          onResetClick={this.game.reset}
         />
         {showOptions && (
           <Options

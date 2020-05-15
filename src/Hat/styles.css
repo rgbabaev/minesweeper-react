@@ -2,3 +2,9 @@
   margin: 6px;
   user-select: none;
 }
+
+.Hat__output {
+  display: inline-block;
+  width: 60px;
+  text-align: left;
+}

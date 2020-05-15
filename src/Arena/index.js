@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import b_ from "b_";
+import { ArenaCell } from '../ArenaCell';
 import "./styles.css";
 
 const b = b_.lock("Arena");
@@ -10,9 +11,14 @@ export const Arena = ({
   size,
   onCellFlag,
   onCellOpen,
-  gameState
+  gameState,
+  onResetClick
 }) => (
-  <div className={b()}>
+  <div
+    className={b()}
+    tabIndex={0}
+    onKeyPress={e => e.charCode === 32 && onResetClick()}
+  >
     <div
       className={b('inner')}
       style={{
@@ -21,28 +27,16 @@ export const Arena = ({
       }}
     >
       {cells.map((cell, i) => {
-        const opened = cell.opened || (gameState === "lost" && cell.mined);
-
         return (
-          <div
-            className={b("cell", { opened: opened, closed: !opened })}
-            style={{ width: cellSize, height: cellSize }}
+          <ArenaCell
+            cell={cell}
+            cellSize={cellSize}
+            i={i}
             key={i}
-            data-neighbor-mines={cell.neighborMines}
-            onClick={() => onCellOpen(i)}
-            onContextMenu={e => {
-              e.preventDefault();
-              onCellFlag(i);
-            }}
-          >
-            {opened
-              ? cell.mined
-                ? "💣"
-                : cell.neighborMines
-              : cell.flagged || gameState === "won"
-              ? "🚩"
-              : null}
-          </div>
+            onCellOpen={onCellOpen}
+            onCellFlag={onCellFlag}
+            gameState={gameState}
+          />
         );
       })}
     </div>

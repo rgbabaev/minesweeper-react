@@ -14,6 +14,16 @@ export class Minesweeper {
     this.reset();
   }
 
+  startTimer = () => {
+    this.startTime = Date.now();
+    this.timerId = setInterval(this._render.bind(this), 1000);
+  };
+
+  stopTimer = () => {
+    this.endTime = Date.now();
+    clearInterval(this.timerId);
+  };
+
   handleCellClick = i => {
     if (this.gameState !== "playing") return;
 
@@ -28,15 +38,16 @@ export class Minesweeper {
 
   _explode = i => {
     this.gameState = "lost";
+    this.endTime = Date.now();
   };
 
   _openCell = i => {
     const cell = this.cells[i];
 
-    if (this.getStats().opened === 0) {
+    if (this.openedCells === 0) {
       this.cells = genCells(this.arena, this.minesCountTotal, i);
       this.minedCells = this.cells.filter(({ mined }) => mined);
-      // start timer
+      this.startTimer();
     }
     if (cell.mined) {
       this._explode(i);
@@ -63,6 +74,7 @@ export class Minesweeper {
 
       if (arraysCompare(this.minedCells, openedCells)) {
         this.gameState = "won";
+        this.stopTimer();
       }
     }
   };
@@ -113,16 +125,21 @@ export class Minesweeper {
       arena: this.arena,
       minesCountTotal: this.minesCountTotal,
       opened: this.openedCells,
-      flagged: this.flaggedCells
+      flagged: this.flaggedCells,
+      timerValue: this.startTime ? (this.endTime || Date.now()) - this.startTime : null,
+      endTime: this.endTime
     };
   }
 
   reset = () => {
+    this.stopTimer();
     this.openedCells = 0;
     this.flaggedCells = 0;
     this.gameState = "playing";
     this.cells = genCells(this.arena, 0, 0);
     this.minedCells = [];
+    this.startTime = null;
+    this.endTime = null;
     this._render();
   };
 
