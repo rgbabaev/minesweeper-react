@@ -1,4 +1,4 @@
-import { arraysCompare, genCells, getNeighborCells } from "./helpers";
+import { arraysCompare, genCells, getNeighborCells } from './helpers';
 
 export class Minesweeper {
   constructor(arena, minesCount, redrawFn) {
@@ -25,9 +25,14 @@ export class Minesweeper {
   };
 
   handleCellClick = i => {
-    if (this.gameState !== "playing") return;
+    if (this.gameState !== 'playing') return;
 
     const cell = this.cells[i];
+
+    if (this.flaggingMode && !cell.opened) {
+      this.flagCell(i);
+      return;
+    }
 
     if (cell.flagged) return;
 
@@ -36,8 +41,16 @@ export class Minesweeper {
     this._render();
   };
 
+  toggleFlaggingMode = () => {
+    if (this.gameState === 'playing') {
+      this.flaggingMode = !this.flaggingMode;
+      this._render();
+    }
+  }
+
   _explode = i => {
-    this.gameState = "lost";
+    this.gameState = 'lost';
+    this.flaggingMode = false;
     this.endTime = Date.now();
   };
 
@@ -73,7 +86,8 @@ export class Minesweeper {
       const openedCells = this.cells.filter(({ opened }) => !opened);
 
       if (arraysCompare(this.minedCells, openedCells)) {
-        this.gameState = "won";
+        this.gameState = 'won';
+        this.flaggingMode = false;
         this.stopTimer();
       }
     }
@@ -97,7 +111,7 @@ export class Minesweeper {
   };
 
   flagCell = i => {
-    if (this.gameState !== "playing") return;
+    if (this.gameState !== 'playing') return;
 
     const cell = this.cells[i];
     if (!cell.opened) {
@@ -127,7 +141,8 @@ export class Minesweeper {
       opened: this.openedCells,
       flagged: this.flaggedCells,
       timerValue: this.startTime ? (this.endTime || Date.now()) - this.startTime : null,
-      endTime: this.endTime
+      endTime: this.endTime,
+      flaggingMode: this.flaggingMode
     };
   }
 
@@ -135,11 +150,12 @@ export class Minesweeper {
     this.stopTimer();
     this.openedCells = 0;
     this.flaggedCells = 0;
-    this.gameState = "playing";
+    this.gameState = 'playing';
     this.cells = genCells(this.arena, 0, 0);
     this.minedCells = [];
     this.startTime = null;
     this.endTime = null;
+    this.flaggingMode = false;
     this._render();
   };
 

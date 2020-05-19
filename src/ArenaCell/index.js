@@ -14,6 +14,16 @@ export const ArenaCell = ({
 }) => {
   const opened = cell.opened || (gameState === "lost" && ((cell.mined && !cell.flagged) || (!cell.mined && cell.flagged)));
 
+  const content = opened
+    ? cell.mined
+      ? '🦠'
+      : cell.flagged && gameState === "lost"
+        ? "❌"
+        : cell.neighborMines
+    : cell.flagged || gameState === "won"
+      ? "🚩"
+      : null;
+
   return (
     <div
       className={b({ opened: opened, closed: !opened })}
@@ -26,13 +36,7 @@ export const ArenaCell = ({
         onCellFlag(i);
       }}
     >
-      {opened
-        ? cell.mined
-          ? '🦠'
-          : cell.flagged && gameState === "lost" ? "❌" : cell.neighborMines
-        : cell.flagged || gameState === "won"
-          ? "🚩"
-          : null}
+      {content}
     </div>
   );
 };

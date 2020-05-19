@@ -21,17 +21,19 @@ export default class App extends React.Component {
   newGame = (arena = [10, 10], mines = 25) => this.game.configure(arena, mines);
 
   render() {
-    const { gameState, minesCountTotal, arena, flagged, timerValue } = this.game.getStats();
+    const { flaggingMode, gameState, minesCountTotal, arena, flagged, timerValue } = this.game.getStats();
     const { showOptions } = this.state;
 
     return (
       <div className="App">
         <Hat
+          flaggingMode={flaggingMode}
           gameState={gameState}
           timerValue={timerValue}
           minesLeftCount={minesCountTotal - flagged}
           onResetClick={this.game.reset}
           onOptionsClick={this.toggleOptions}
+          onFlaggingSwitch={this.game.toggleFlaggingMode}
         />
         <Arena
           gameState={gameState}

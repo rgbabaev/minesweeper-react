@@ -84,6 +84,7 @@ export const Options = ({ arena, mines, onApply, onClose }) => {
           <LabeledInput className={b('labeledInput')} onBlur={recalcValues} label='Width' value={w} onChange={set('w')} />
           <LabeledInput className={b('labeledInput')} onBlur={recalcValues} label='Height' value={h} onChange={set('h')} />
           <LabeledInput className={b('labeledInput')} onBlur={recalcValues} label='Mines' value={m} onChange={setMines} />
+          {/* TODO: Show mined cells percent from total cells */}
         </div>
       </div>
     </Modal>

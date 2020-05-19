@@ -11,10 +11,11 @@ import './styles.css';
 const b = b_.lock('Hat');
 
 export const Hat = ({
+  flaggingMode,
   gameState,
   minesLeftCount,
   timerValue,
-  onFlagClick,
+  onFlaggingSwitch,
   onOptionsClick,
   onResetClick
 }) => (
@@ -27,7 +28,7 @@ export const Hat = ({
         {gameState === "playing" ? "🙂" : gameState === "won" ? "😎" : "😵"}
         New game
       </Button>,
-      <Switcher onClick={onFlagClick} title="Flag">Flag</Switcher>,
+      <Switcher onChange={onFlaggingSwitch} title="Flag" checked={flaggingMode}>Flag</Switcher>,
       <Button onClick={onOptionsClick} title="Options">Options</Button>
     ]}
   />
