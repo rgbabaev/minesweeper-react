@@ -1,0 +1,9 @@
+.FooterPanel {
+  flex-shrink: 0;
+  margin: 6px;
+  user-select: none;
+}
+
+.FooterPanel__zoomButton {
+  width: 35px;
+}

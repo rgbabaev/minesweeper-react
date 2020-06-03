@@ -1,16 +1,20 @@
 .Arena {
   display: flex;
-  /* justify-content: center; */
-  max-width: 100%;
+  flex-grow: 1;
+  width: 100%;
   overflow: auto;
   outline: none;
+  user-select: none;
+}
+
+.Arena__wrap {
+  margin: 12px auto;
 }
 
 .Arena__inner {
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  border: solid 1px #ccc;
-  margin: 12px;
-  user-select: none;
+  border: solid 12px #eee;
+  transform-origin: 0 0;
 }

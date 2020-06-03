@@ -5,6 +5,7 @@
   box-sizing: border-box;
   cursor: default;
   font-size: 12px;
+  touch-action: manipulation;
 }
 
 .ArenaCell_opened {
@@ -49,4 +50,8 @@
 .ArenaCell_closed {
   border: outset 2px #fff;
   background-color: #ccc;
+}
+
+.ArenaCell_pressed {
+  border-color: transparent;
 }
