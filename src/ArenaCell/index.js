@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import b_ from "b_";
+import { getCellNeighborMines, CELL_FLAGGED, CELL_OPENED, CELL_MINED } from '../core/helpers';
 import "./styles.css";
 
 const b = b_.lock("ArenaCell");
@@ -14,28 +15,35 @@ export const ArenaCell = ({
 }) => {
   const [pressed, setPressed] = useState(false);
 
-  const opened = cell.opened || (gameState === "lost" && ((cell.mined && !cell.flagged) || (!cell.mined && cell.flagged)));
+  const opened =
+    (cell & CELL_OPENED)
+    || (
+      gameState === "lost" && (
+        ((cell & CELL_MINED) && !(cell & CELL_FLAGGED))
+        || (!(cell & CELL_MINED) && (cell & CELL_FLAGGED))
+      )
+    );
 
   const content = opened
-    ? cell.mined
+    ? (cell & CELL_MINED)
       ? '🦠'
-      : cell.flagged && gameState === "lost"
+      : (cell & CELL_FLAGGED) && gameState === "lost"
         ? "❌"
-        : cell.neighborMines
-    : cell.flagged || gameState === "won"
+        : getCellNeighborMines(cell) || ''
+    : (cell & CELL_FLAGGED) || gameState === "won"
       ? "🚩"
       : null;
 
   return (
     <div
       className={b({
-        opened: opened,
+        opened: !!opened,
         closed: !opened,
         pressed: pressed && !opened
       })}
       style={{ width: cellSize, height: cellSize }}
       key={i}
-      data-neighbor-mines={cell.neighborMines}
+      data-neighbor-mines={getCellNeighborMines(cell)}
       onClick={() => onCellOpen(i)}
       onMouseDown={e => !pressed && (e.buttons & 1) && setPressed(true)}
       onMouseUp={() => pressed && setPressed(false)}
@@ -51,3 +59,5 @@ export const ArenaCell = ({
     </div>
   );
 };
+
+export const PureArenaCell = memo(ArenaCell);

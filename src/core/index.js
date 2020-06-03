@@ -1,4 +1,13 @@
-import { arraysCompare, genCells, getNeighborCells } from './helpers';
+import {
+  arraysCompare,
+  genCells,
+  getNeighborCells,
+  CELL_FLAGGED,
+  CELL_MINED,
+  CELL_OPENED,
+  getCellNeighborMines,
+  toggleCellFlag
+} from './helpers';
 
 export class Minesweeper {
   constructor(arena, minesCount, redrawFn) {
@@ -29,14 +38,14 @@ export class Minesweeper {
 
     const cell = this.cells[i];
 
-    if (this.flaggingMode && !cell.opened) {
+    if (this.flaggingMode && !(cell & CELL_OPENED)) {
       this.flagCell(i);
       return;
     }
 
-    if (cell.flagged) return;
+    if (cell & CELL_FLAGGED) return;
 
-    if (cell.opened) this._openNeighborCells(i);
+    if (cell & CELL_OPENED) this._openNeighborCells(i);
     else this._openCell(i);
     this._render();
   };
@@ -58,17 +67,18 @@ export class Minesweeper {
     const cell = this.cells[i];
 
     if (this.openedCells === 0) {
-      this.cells = genCells(this.arena, this.minesCountTotal, i);
-      this.minedCells = this.cells.filter(({ mined }) => mined);
+      const [cells, minedCells] = genCells(this.arena, this.minesCountTotal, i);
+      this.cells = cells;
+      this.minedCells = minedCells;
       this.startTimer();
     }
-    if (cell.mined) {
+    if (cell & CELL_MINED) {
       this._explode(i);
-    } else if (!cell.opened) {
+    } else if (!(cell & CELL_OPENED)) {
       let cellsToOpen = [i];
 
       for (let x = 0; x < cellsToOpen.length; x++) {
-        if (!this.cells[cellsToOpen[x]].neighborMines) {
+        if (!getCellNeighborMines(this.cells[cellsToOpen[x]])) {
           const neighborCells = getNeighborCells(
             this.arena,
             cellsToOpen[x]
@@ -79,13 +89,16 @@ export class Minesweeper {
       }
 
       cellsToOpen.forEach(i => {
-        this.cells[i].opened = true;
+        this.cells[i] = (this.cells[i] | CELL_OPENED)
         this.openedCells++;
       });
 
-      const openedCells = this.cells.filter(({ opened }) => !opened);
+      const restCells = this.cells
+        .map((cell, i) => (cell & CELL_OPENED) ? null : i)
+        .filter(cell => cell !== null);
 
-      if (arraysCompare(this.minedCells, openedCells)) {
+      if (arraysCompare(this.minedCells, restCells)) {
+        
         this.gameState = 'won';
         this.flaggingMode = false;
         this.stopTimer();
@@ -95,16 +108,16 @@ export class Minesweeper {
 
   _openNeighborCells = i => {
     const cell = this.cells[i];
-    if (!cell.mined) {
+    if (!(cell & CELL_MINED)) {
       const neighborCells = getNeighborCells(this.arena, i);
       const flaggedNeighborsCount = neighborCells
         .map(i => this.cells[i])
-        .filter(({ flagged }) => !!flagged).length;
+        .filter(cell => !!(cell & CELL_FLAGGED)).length;
 
-      if (flaggedNeighborsCount === cell.neighborMines) {
+      if (flaggedNeighborsCount === getCellNeighborMines(cell)) {
         neighborCells
           .map(i => [i, this.cells[i]])
-          .filter(([i, cell]) => !cell.flagged)
+          .filter(([i, cell]) => !(cell & CELL_FLAGGED))
           .forEach(([i]) => this._openCell(i));
       }
     }
@@ -114,9 +127,9 @@ export class Minesweeper {
     if (this.gameState !== 'playing') return;
 
     const cell = this.cells[i];
-    if (!cell.opened) {
-      cell.flagged = !cell.flagged;
-      cell.flagged ? this.flaggedCells++ : this.flaggedCells--;
+    if (!(cell & CELL_OPENED)) {
+      this.cells[i] = toggleCellFlag(cell);
+      (this.cells[i] & CELL_FLAGGED) ? this.flaggedCells++ : this.flaggedCells--;
     }
     this._render();
   };
@@ -126,11 +139,11 @@ export class Minesweeper {
   }
 
   _countFlaggedCells() {
-    return this.cells.filter(({ flagged }) => flagged === true).length;
+    return this.cells.filter(cell => !!(cell & CELL_FLAGGED)).length;
   }
 
   _countOpenedCells() {
-    return this.cells.filter(({ opened }) => opened === true).length;
+    return this.cells.filter(cell => !!(cell & CELL_OPENED)).length;
   }
 
   getStats() {
@@ -147,12 +160,13 @@ export class Minesweeper {
   }
 
   reset = () => {
+    const [cells, minedCells] = genCells(this.arena, 0, 0);
     this.stopTimer();
     this.openedCells = 0;
     this.flaggedCells = 0;
     this.gameState = 'playing';
-    this.cells = genCells(this.arena, 0, 0);
-    this.minedCells = [];
+    this.cells = cells;
+    this.minedCells = minedCells;
     this.startTime = null;
     this.endTime = null;
     this.flaggingMode = false;

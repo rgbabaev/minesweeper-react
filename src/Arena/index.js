@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import React from "react";
 import b_ from "b_";
-import { ArenaCell } from '../ArenaCell';
+import { PureArenaCell } from '../ArenaCell';
 import "./styles.css";
 
 const b = b_.lock("Arena");
@@ -51,7 +51,7 @@ export class Arena extends React.Component {
       width,
       height
     } = this.state;
-  
+
     return (
       <div
         className={b()}
@@ -70,7 +70,7 @@ export class Arena extends React.Component {
           >
             {cells.map((cell, i) => {
               return (
-                <ArenaCell
+                <PureArenaCell
                   cell={cell}
                   cellSize={cellSize}
                   i={i}
@@ -87,5 +87,3 @@ export class Arena extends React.Component {
     );
   }
 }
-
-export const PureArena = memo(Arena);
