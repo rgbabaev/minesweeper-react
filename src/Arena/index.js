@@ -26,7 +26,10 @@ export class Arena extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.zoom !== this.props.zoom) {
+    if (
+      prevProps.arena !== this.props.arena
+      || prevProps.zoom !== this.props.zoom
+    ) {
       const innerElement = this.innerRef && this.innerRef.current;
 
       if (innerElement) {
@@ -39,7 +42,7 @@ export class Arena extends React.PureComponent {
   render() {
     const {
       cells = [],
-      size,
+      arena,
       onCellFlag,
       onCellOpen,
       gameState,
@@ -62,8 +65,8 @@ export class Arena extends React.PureComponent {
           <div
             className={b('inner')}
             style={{
-              width: size[0] * cellSize,
-              height: size[1] * cellSize,
+              width: arena[0] * cellSize,
+              height: arena[1] * cellSize,
               transform: `scale(${zoom})`
             }}
             ref={this.innerRef}

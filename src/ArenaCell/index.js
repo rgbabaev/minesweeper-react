@@ -1,6 +1,11 @@
 import React, { memo, useState } from "react";
 import b_ from "b_";
-import { getCellNeighborMines, CELL_FLAGGED, CELL_OPENED, CELL_MINED } from '../core/helpers';
+import {
+  getCellNeighborMines,
+  CELL_FLAGGED,
+  CELL_OPENED,
+  CELL_MINED
+} from '../core/helpers';
 import "./styles.css";
 
 const b = b_.lock("ArenaCell");

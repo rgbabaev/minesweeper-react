@@ -37,7 +37,7 @@ export default class App extends React.Component {
 
   handleZoomChange = zoom => zoom && this.setState({ zoom });
 
-  newGame = (arena = [10, 10], mines = 25) => this.game.configure(arena, mines);
+  newGame = (arena, mines) => this.game.configure(arena, mines);
 
   render() {
     const {
@@ -62,7 +62,7 @@ export default class App extends React.Component {
         />
         <Arena
           gameState={gameState}
-          size={arena}
+          arena={arena}
           cells={this.game.getCells()}
           onCellOpen={this.game.handleCellClick}
           onCellFlag={this.game.flagCell}
