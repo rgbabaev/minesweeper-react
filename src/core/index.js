@@ -93,12 +93,13 @@ export class Minesweeper {
         this.openedCells++;
       });
 
+      this.cells = [...this.cells];
+
       const restCells = this.cells
         .map((cell, i) => (cell & CELL_OPENED) ? null : i)
         .filter(cell => cell !== null);
 
       if (arraysCompare(this.minedCells, restCells)) {
-        
         this.gameState = 'won';
         this.flaggingMode = false;
         this.stopTimer();
@@ -129,6 +130,7 @@ export class Minesweeper {
     const cell = this.cells[i];
     if (!(cell & CELL_OPENED)) {
       this.cells[i] = toggleCellFlag(cell);
+      this.cells = [...this.cells];
       (this.cells[i] & CELL_FLAGGED) ? this.flaggedCells++ : this.flaggedCells--;
     }
     this._render();

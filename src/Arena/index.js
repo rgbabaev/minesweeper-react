@@ -6,7 +6,7 @@ import "./styles.css";
 const b = b_.lock("Arena");
 const cellSize = 28;
 
-export class Arena extends React.Component {
+export class Arena extends React.PureComponent {
   static defaultProps = { zoom: 1 };
 
   state = {
