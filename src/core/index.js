@@ -151,6 +151,9 @@ export class Minesweeper {
       gameState: this.gameState,
       arena: this.arena,
       minesCountTotal: this.minesCountTotal,
+      minesCountLeft: this.gameState === 'won'
+        ? 0
+        : this.minesCountTotal - this.flaggedCells,
       opened: this.openedCells,
       flagged: this.flaggedCells,
       timerValue: this.startTime ? (this.endTime || Date.now()) - this.startTime : null,
@@ -162,6 +165,7 @@ export class Minesweeper {
   reset = () => {
     const [cells, minedCells] = genCells(this.arena, 0, 0);
     this.stopTimer();
+
     this.openedCells = 0;
     this.flaggedCells = 0;
     this.gameState = 'playing';
@@ -170,6 +174,7 @@ export class Minesweeper {
     this.startTime = null;
     this.endTime = null;
     this.flaggingMode = false;
+
     this._render();
   };
 

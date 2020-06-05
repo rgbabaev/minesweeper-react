@@ -40,7 +40,15 @@ export default class App extends React.Component {
   newGame = (arena = [10, 10], mines = 25) => this.game.configure(arena, mines);
 
   render() {
-    const { flaggingMode, gameState, minesCountTotal, arena, flagged, timerValue } = this.game.getStats();
+    const {
+      flaggingMode,
+      gameState,
+      minesCountLeft,
+      minesCountTotal,
+      arena,
+      flagged,
+      timerValue
+    } = this.game.getStats();
     const { showOptions, zoom } = this.state;
 
     return (
@@ -48,7 +56,7 @@ export default class App extends React.Component {
         <Hat
           gameState={gameState}
           timerValue={timerValue}
-          minesLeftCount={minesCountTotal - flagged}
+          minesLeftCount={minesCountLeft}
           onResetClick={this.game.reset}
           onOptionsClick={this.toggleOptions}
         />
