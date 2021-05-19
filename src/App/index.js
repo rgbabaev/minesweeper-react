@@ -4,6 +4,11 @@ import { FooterPanel } from "../FooterPanel";
 import { Hat } from "../Hat";
 import { Minesweeper } from "../core";
 import { Options } from "../Options";
+import {
+  ZOOM_MIN,
+  ZOOM_MAX,
+  ZOOM_DEFAULT
+} from '../constants';
 import "./styles.css";
 
 function preventZoom(event) {
@@ -35,7 +40,13 @@ export default class App extends React.Component {
   toggleOptions = () =>
     this.setState(({ showOptions }) => ({ showOptions: !showOptions }));
 
-  handleZoomChange = zoom => zoom && this.setState({ zoom });
+  handleZoomChange = zoom => zoom && zoom > 0 && this.setState({
+    zoom: zoom > ZOOM_MAX
+      ? ZOOM_MAX
+      : zoom < ZOOM_MIN
+        ? ZOOM_MIN
+        : zoom
+  });
 
   newGame = (arena, mines) => this.game.configure(arena, mines);
 
