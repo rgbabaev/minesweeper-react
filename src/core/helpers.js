@@ -1,4 +1,4 @@
-import { times } from "ramda";
+import times from '../lib/times.mjs';
 
 /*
      mines  opened
@@ -31,7 +31,6 @@ export const getCellNeighborMines = (cell = 0) => cell >> 3;
 // export const flagCell = (cell = 0) => cell | CELL_FLAGGED;
 // export const unflagCell = (cell = 0) => cell & (~CELL_FLAGGED);
 export const toggleCellFlag = (cell = 0) => cell ^ CELL_FLAGGED;
-
 
 export function getFreeRandomCell([width, height], flatBusyCells) {
   const sortedBusyCells = flatBusyCells
@@ -88,7 +87,7 @@ export const getNeighborCells = ([width, height], i) => {
 export const calcHeatMap = ([width, height], mines = []) => {
   const map = [];
 
-  mines.forEach(cell => {
+  mines.forEach((cell) => {
     const col = cell % width;
     const row = Math.floor(cell / width);
 
@@ -114,7 +113,7 @@ export function genCells(arena, minesCount, clicked) {
   const heatMap = calcHeatMap(arena, mines);
 
   const cells = times(
-    i => (heatMap[i] << 3) + (+mines.includes(i) << 1),
+    (i) => (heatMap[i] << 3) + (+mines.includes(i) << 1),
     arena[0] * arena[1]
   );
 
