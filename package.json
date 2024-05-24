@@ -1,6 +1,6 @@
 {
   "name": "minesweeper-react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Classic Minesweeper game",
   "keywords": [
     "react",
@@ -8,21 +8,23 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "@tarantool.io/ui-kit": "0.16.0",
-    "b_": "1.3.4",
-    "ramda": "0.27.0",
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
-    "react-scripts": "3.0.1"
+    "@blueprintjs/core": "^5.10.3",
+    "b_": "^1.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "typescript": "3.8.3"
+    "@vitejs/plugin-react": "^4.3.0",
+    "vite": "^5.2.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": "^18.0.0 || >=20.0.0"
   },
   "browserslist": [
     ">0.2%",
